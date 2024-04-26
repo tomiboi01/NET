@@ -1,0 +1,5 @@
+interface IReciclable
+{
+    void Reciclar();
+
+}
