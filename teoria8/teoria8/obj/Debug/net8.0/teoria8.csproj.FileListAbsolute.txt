@@ -1,0 +1,15 @@
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\bin\Debug\net8.0\teoria8.exe
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\bin\Debug\net8.0\teoria8.deps.json
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\bin\Debug\net8.0\teoria8.runtimeconfig.json
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\bin\Debug\net8.0\teoria8.dll
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\bin\Debug\net8.0\teoria8.pdb
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\teoria8.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\teoria8.AssemblyInfoInputs.cache
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\teoria8.AssemblyInfo.cs
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\teoria8.csproj.CoreCompileInputs.cache
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\teoria8.sourcelink.json
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\teoria8.dll
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\refint\teoria8.dll
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\teoria8.pdb
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\teoria8.genruntimeconfig.cache
+C:\Users\tomic\OneDrive\Escritorio\NET\teoria8\teoria8\obj\Debug\net8.0\ref\teoria8.dll

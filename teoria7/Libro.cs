@@ -1,4 +1,4 @@
-
+namespace teoria7;
 class Libro:IAlquilable,IReciclable
 {
 

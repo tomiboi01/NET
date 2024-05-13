@@ -1,4 +1,6 @@
-﻿Auto auto = new Auto();
+﻿using teoria7;
+
+Auto auto = new Auto();
 Libro libro = new Libro();
 Persona persona = new Persona();
 Perro perro = new Perro();

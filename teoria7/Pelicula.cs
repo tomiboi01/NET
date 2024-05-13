@@ -1,5 +1,4 @@
-
-
+namespace teoria7;
 class Pelicula: IAlquilable{
 
     public void SeAlquilaA(Persona p) => Console.WriteLine("Alquilando película a persona");

@@ -1,4 +1,4 @@
-
+namespace teoria7;
 class Auto : ILavable, IReciclable, IVendible
 {
         public void Lavar() => Console.WriteLine("Lavando auto");

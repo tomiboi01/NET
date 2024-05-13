@@ -1,4 +1,4 @@
-
+namespace teoria7;
 interface IAlquilable
 {
     void SeAlquilaA(Persona p);

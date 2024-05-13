@@ -1,3 +1,4 @@
+namespace teoria7;
 class Perro : IAtendible, IVendible, ILavable
 {
     public void Atender() => Console.WriteLine("Atendiendo perro");
