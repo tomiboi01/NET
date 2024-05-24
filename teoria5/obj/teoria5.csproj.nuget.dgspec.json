@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tomic\\OneDrive\\Escritorio\\teoria5\\teoria5.csproj": {}
+    "C:\\Users\\tomic\\OneDrive\\Escritorio\\NET\\teoria5\\teoria5.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tomic\\OneDrive\\Escritorio\\teoria5\\teoria5.csproj": {
+    "C:\\Users\\tomic\\OneDrive\\Escritorio\\NET\\teoria5\\teoria5.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tomic\\OneDrive\\Escritorio\\teoria5\\teoria5.csproj",
+        "projectUniqueName": "C:\\Users\\tomic\\OneDrive\\Escritorio\\NET\\teoria5\\teoria5.csproj",
         "projectName": "teoria5",
-        "projectPath": "C:\\Users\\tomic\\OneDrive\\Escritorio\\teoria5\\teoria5.csproj",
+        "projectPath": "C:\\Users\\tomic\\OneDrive\\Escritorio\\NET\\teoria5\\teoria5.csproj",
         "packagesPath": "C:\\Users\\tomic\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tomic\\OneDrive\\Escritorio\\teoria5\\obj\\",
+        "outputPath": "C:\\Users\\tomic\\OneDrive\\Escritorio\\NET\\teoria5\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\tomic\\AppData\\Roaming\\NuGet\\NuGet.Config"

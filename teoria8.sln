@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "teoria8", "teoria8", "{C9E2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "teoria8", "teoria8\teoria8\teoria8.csproj", "{E700680C-44BE-434C-B466-2AC6D9691957}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "teoria9", "teoria9\teoria9.csproj", "{D08199DA-D390-496A-8190-D07B0F6A1507}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +22,10 @@ Global
 		{E700680C-44BE-434C-B466-2AC6D9691957}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E700680C-44BE-434C-B466-2AC6D9691957}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E700680C-44BE-434C-B466-2AC6D9691957}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D08199DA-D390-496A-8190-D07B0F6A1507}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D08199DA-D390-496A-8190-D07B0F6A1507}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D08199DA-D390-496A-8190-D07B0F6A1507}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D08199DA-D390-496A-8190-D07B0F6A1507}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E700680C-44BE-434C-B466-2AC6D9691957} = {C9E2D271-E0ED-4DFE-8FB1-6B3D45B438EC}
