@@ -3,16 +3,24 @@ using Escuela;
 EscuelaSqlite.Inicializar();
 using var db = new EscuelaContext();
 
-Alumno nuevo = new Alumno()
+Curso curso = new()
 {
-Nombre = "Ana",
-Examenes =
-[
-    new () {Nota = 5, CursoId = 1},
-    new () {Nota = 8, CursoId = 4}
-]
-}
-;
-db.Add(nuevo);
+    Titulo = "Matemáticas",
+};
+
+Alumno tomas = new()
+{
+    Nombre = "Ricardo",
+};
+
+db.Add(tomas);
+db.SaveChanges();
+Examen examen = new()
+{
+    Alumnoid = tomas.Id,
+    Nota = 7.5,
+    CursoId = curso.Id,
+};
+db.Add (examen);
 db.SaveChanges();
 
