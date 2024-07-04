@@ -1,0 +1,305 @@
+﻿@page "/{Id:int?}"
+
+@using SGE.Aplicacion
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@inject ManejarLogin manejarLogin
+@inject CasoDeUsoUsuarioObtenerPorId casoDeUsoObtenerUsuario
+@inject CasoDeUsoExpedienteConsultaTodos casoDeUsoExpedienteConsultaTodos
+@inject IServicioAutorizacion ServicioAutorizacion
+<PageTitle>Inicio</PageTitle>
+@if (Id == null)    
+{
+        <Inicio/>  
+}
+else if (_usuarioExiste)
+{
+    <div class="container">
+        <div class="alinear">
+            @if (Id == 1)
+            {
+                <span>Ha iniciado sesión como administrador. </span>
+                <button class="btn btn-primary" @onclick="MostrarUsuarios">Mostrar y modificar usuarios </button>
+            }
+        </div>
+        <div class="alinear verticalmayormargin">
+            <h1 class="text-start"><strong> Bienvenido @_user.Nombre @_user.Apellido </strong> </h1>
+            <button class="btn btn-success" type="submit" @onclick="modificarPerfil"> Modificar Perfil </button>
+        </div>
+        <div class="card verticalmargin">
+            <div class="card-header">
+                <h3>Expedientes</h3>
+            </div>
+            <div class="card-body">
+                @if (ServicioAutorizacion.PoseeElPermiso(_user.Id, Permiso.ExpedienteAlta))
+                {
+                    <button class="btn btn-primary margin"  @onclick="AgregarExpediente" >Crear expediente</button> 
+                }
+                <button class= "btn btn-primary margin" @onclick="verExpedientes" > Mostrar expedientes</button>
+                @if (_verExpedientes)
+                {
+                    <div class="row">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Caratula</th>
+                                    <th>Estado</th>
+                                    <th>Fecha de creación</th>
+                                    <th>Fecha de última modificación</th>
+                                    <th>Usuario de última modificación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (Expediente expediente in _expedientes)
+                                {   
+                                    <tr>
+                                        <td>@expediente.Caratula</td>
+                                        <td>@expediente.Estado</td> 
+                                        <td>@expediente.FechaCreacion</td>
+                                        <td>@expediente.FechaUltModificacion</td>
+                                        <td>@expediente.UsuarioUltModificacion</td>
+                                        @if (ServicioAutorizacion.PoseeElPermiso(_user.Id, Permiso.ExpedienteBaja))
+                                        {
+                                            <td> <button class="btn btn-danger" type="submit" @onclick="() => EliminarExpediente(expediente.Id)">Eliminar </button> </td>
+                                        }
+                                        else
+                                        {
+                                            <td>  
+                                                <div class="alert alert-danger" role="alert">
+                                                    <strong>No posee permiso para eliminar expedientes</strong> 
+                                                </div> 
+                                            </td>
+                                        }
+                                        @if (ServicioAutorizacion.PoseeElPermiso(_user.Id, Permiso.ExpedienteModificacion))
+                                        {
+                                            <td> <button class="btn btn-primary" @onclick= "() => ModificarExpediente(expediente.Id)"> Modificar </button> </td>
+                                        }
+                                        else
+                                        {
+                                            <td>  
+                                            <div class="alert alert-danger" role="alert">
+                                                <strong>No posee permiso para modificar expedientes</strong> 
+                                            </div> 
+                                            </td>
+                                        }
+                                        @if (ServicioAutorizacion.PoseeElPermiso(_user.Id, Permiso.TramiteAlta))
+                                        {
+                                            <td> <button class="btn btn-secondary" type="submit" @onclick="() => agregarTramite(expediente.Id)">Agregar Tramite </button> </td>
+                                        }
+                                        else
+                                        {
+                                            <td>  
+                                                <div class="alert alert-danger" role="alert">
+                                                    <strong>No posee permiso para agregar trámite</strong> 
+                                                </div> 
+                                            </td>
+                                        }
+                                        @if (expediente.Tramites != null && expediente.Tramites.Count > 0)
+                                        {
+                                            <td> <button class="btn btn-primary" @onclick="() => AlternarTramites(expediente.Tramites)" > Mostrar/ocultar tramites </button> </td>
+                                        }
+                                        else
+                                        {
+                                            <td> <button  class="btn btn-primary" disabled> No tiene trámites </button> </td>
+                                        }
+
+                                    </tr>
+                                }
+                    </tbody>
+                    </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card margin">
+        <div class="card-header">
+            <h3>Trámites</h3>
+        </div>
+        <div class="card-body">
+            <button class= "btn btn-primary margin"  @onclick="verTramites"> Mostrar trámites</button>
+            <button class="btn btn-primary margin" @onclick="listarTramiteEtiqueta">Listar trámites por etiqueta</button>
+            @if(_verTramites)
+            {
+                
+                @if (_listaDeListas.Count > 0)
+                {
+                    @foreach (List<Tramite> tramites in _listaDeListas)
+                    {   
+                        <div class=margin >Expediente @tramites[0].ExpedienteId
+                        <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Contenido</th>
+                                <th>Etiqueta</th>
+                                <th>Fecha de creación</th>
+                                <th>Fecha de última modificación</th>
+                                <th>Usuario de última modificación</th>
+                            </tr>
+
+                        </thead>
+
+                        @foreach (Tramite tramite in tramites)
+                        {
+
+                            <tbody>
+                            <tr>
+                                <td>@tramite.Contenido</td>
+                                <td>@tramite.Etiqueta</td>
+                                <td>@tramite.FechaCreacion</td>
+                                <td>@tramite.FechaUltModificacion</td>
+                                <td>@tramite.UsuarioUltModificacion</td>
+                                @if (ServicioAutorizacion.PoseeElPermiso(_user.Id, Permiso.TramiteBaja))
+                                {
+                                    <td> <button class="btn btn-danger" @onclick="() => EliminarTramite(tramite.Id)">Eliminar tramite </button> </td>
+                                }
+                                else
+                                {
+                                    <td>  
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>No posee permiso para eliminar tramites</strong> 
+                                        </div> 
+                                    </td>
+                                }
+                                @if (ServicioAutorizacion.PoseeElPermiso(_user.Id, Permiso.TramiteModificacion))
+                                {
+                                    <td> <button class="btn btn-warning" @onclick="() => ModificarTramite(tramite.Id)">Modificar tramite </button> </td>
+                                }
+                                else
+                                {
+                                    <td>  
+                                        <div class="alert alert-danger margin" role="alert">
+                                            <strong>No posee permiso para modificar trámites</strong> 
+                                        </div> 
+                                    </td>
+                                }
+                            </tr>
+                            </tbody>
+                        }
+                        </table>  
+                        </div> 
+                    }
+                }
+                else
+                {            
+                    <p class="margin"> No hay trámites para mostrar. Busque un expediente y presione mostrar trámites </p>
+                }
+            
+            }
+        </div>
+    </div>
+
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        <strong>Su número de usuario no es válido. Por favor regístrese o inicie sesión con un usuario válido</strong> 
+    </div>   
+}
+
+@code {
+    #nullable disable
+        Usuario _user;
+        List<Expediente> _expedientes;
+    #nullable enable
+    bool _usuarioExiste = true;
+    List<List<Tramite>> _listaDeListas = new List<List<Tramite>>();
+    [Parameter]
+    public int? Id { get; set; }
+    bool _verTramites = false;
+    bool _verExpedientes = false;
+    void Loggear()
+    {
+        Navigation.NavigateTo("/login");
+    }
+    
+    void Register()
+    {
+        Navigation.NavigateTo("/register");
+    }
+    void EliminarExpediente(int idexp)
+    {
+        Navigation.NavigateTo($"/expediente/eliminar/{Id}/{idexp}");
+    }
+
+    void ModificarExpediente(int idexp)
+    {
+        Navigation.NavigateTo($"/expediente/modificar/{Id}/{idexp}");
+    }
+    void listarTramiteEtiqueta(){
+        Navigation.NavigateTo($"/tramites/mostrarPorEtiqueta/{Id}");
+    }
+    void MostrarUsuarios()
+    {
+        Navigation.NavigateTo($"/usuarios/{Id}");
+    }
+    void AlternarTramites(List<Tramite> tramites)
+    {
+        if (!_listaDeListas.Contains(tramites))
+        {
+            _listaDeListas.Add(tramites);
+        }
+        else
+        {
+            _listaDeListas.Remove(tramites);
+        }
+    }
+
+    void EliminarTramite(int idTramite)
+    {
+        Navigation.NavigateTo($"/tramite/eliminar/{Id}/{idTramite}");
+    }
+    void ModificarTramite(int idTramite)
+    {
+        Navigation.NavigateTo($"/tramite/modificar/{Id}/{idTramite}");
+    }
+    void agregarTramite(int idExpediente)
+    {
+        Navigation.NavigateTo($"/tramite/agregar/{Id}/{idExpediente}");
+    }
+    void modificarPerfil()
+    {
+        Navigation.NavigateTo($"/usuarios/modificar/{Id}/{Id}");
+    }
+    void verTramites()
+    {
+        _verTramites = !_verTramites;
+    }
+    void verExpedientes()
+    {
+        _verExpedientes = !_verExpedientes;
+    }
+    void AgregarExpediente()
+    {
+        Navigation.NavigateTo($"/expediente/agregar/{Id}");
+    }
+
+    protected override void OnInitialized()
+    {
+
+        try
+        {
+            if (Id != null)
+            {
+                _user = casoDeUsoObtenerUsuario.Ejecutar(Id.Value);
+                _expedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar();
+            }
+        }
+        catch {_usuarioExiste = false;}
+    }
+
+}
+
+
+<style>
+    td, th{
+        text-align: center;
+    }
+
+    .verticalmayormargin{
+        margin-top: 30px;
+        margin-bottom:30px;
+    }
+    
+
+</style>

@@ -1,0 +1,34 @@
+@page "/expediente/eliminar/{Id:int}/{IdExp:int}"
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@inject CasoDeUsoExpedienteBaja caso
+@inject IServicioAutorizacion ServicioAutorizacion
+<PageTitle>Eliminando expediente</PageTitle>
+@code
+{
+
+    [Parameter]
+    public int IdExp { get; set; }
+    [Parameter]
+    public int Id { get; set; }
+
+
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        try
+        {
+            if (ServicioAutorizacion.PoseeElPermiso(Id, Permiso.ExpedienteBaja))
+            {
+                caso.Ejecutar(Id, IdExp);
+            }
+        }
+        finally
+        {
+            Navigation.NavigateTo($"/{Id}");
+        }
+
+
+    }
+}

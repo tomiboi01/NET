@@ -1,0 +1,80 @@
+@page "/register"
+@using SGE.Aplicacion
+@inject NavigationManager Navigation
+@using SGE.Repositorios
+@namespace SGE.Aplicacion.CasosDeUso
+@rendermode InteractiveServer
+@inject CasoDeUsoUsuarioAlta casoDeUsoUsuarioAlta
+@inject ManejarLogin manejarLogin
+<PageTitle>Registrarse</PageTitle>
+<h3>Registrarse</h3>
+
+<div class="form-group">
+    <label>Nombre:</label>
+    <input type="text" @bind="_user.Nombre" class="form-control margin" />
+    <label>Apellido:</label>
+    <input type="text" @bind="_user.Apellido" class="form-control margin" />
+    <label>Correo electrónico:</label>
+    <input type="text" @bind="_user.CorreoElectronico" class="form-control margin" />
+    <label>Contraseña:</label>
+    <input type="password" id="contraseña" @bind="_user.Contraseña" class="form-control margin" />
+</div>
+<button type="submit" @onclick="Agregar" class="btn btn-primary margin">Registrar</button>
+
+@if (_mensajeError != "")
+{
+    <div class="alert alert-danger margin alinear" role="alert">
+
+        <strong>Error!</strong> @_mensajeError.
+        <button type="button" class="close" @onclick="CerrarError">x</button>
+    </div>
+}
+
+
+@code
+{
+
+    Usuario _user = new();
+    string _mensajeError = "";
+    void CerrarError() => _mensajeError = "";
+
+
+    private void Agregar()
+    {
+
+        try
+        {
+            if (!manejarLogin.YaExisteConCorreo(_user.CorreoElectronico))
+            {
+                casoDeUsoUsuarioAlta.Ejecutar(_user);
+                Navigation.NavigateTo("/login");
+            }
+            else
+            {
+                _mensajeError = "Ya hay un usuario con ese correo";
+            }
+        }
+        catch (Exception e)
+        {
+            _mensajeError = e.Message;
+        }
+        finally
+        {
+            _user = new();
+        }
+
+    }
+
+
+}
+
+<style>
+    .margin {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .alineadoDer {
+        align-content: ;
+    }
+</style>

@@ -1,0 +1,85 @@
+@page "/expediente/modificar/{Id:int}/{IdExp:int}"
+@inject NavigationManager Navigation
+@inject CasoDeUsoExpedienteModificacion casoDeUsoExpedienteModificar
+@inject CasoDeUsoExpedienteConsultaPorId casoDeUsoExpedienteConsultaPorId
+@inject NavigationManager Navigation
+@inject IServicioAutorizacion ServicioAutorizacion
+@rendermode InteractiveServer
+<PageTitle>Modificar expediente</PageTitle>
+@if (PoseePermiso())
+{
+
+  <h2> Modificando expediente número @IdExp</h2>
+  <div>
+    <label> Caratula:</label>
+    <input placeholder=@_aux.Caratula @bind-value="_exp.Caratula">
+  </div>
+  <button class="btn btn-primary margin" @onclick="Modificar">Modificar</button>
+
+
+}
+@if (_mensajeError != "")
+{
+  <div class="alert alert-danger margin alinear" role="alert">
+    <strong>Error!</strong> @_mensajeError.
+    <button type="button" class="close" @onclick="CerrarError">x</button>
+  </div>
+}
+@code
+{
+  [Parameter]
+  public int IdExp { get; set; }
+  [Parameter]
+  public int Id { get; set; }
+
+#nullable disable
+  Expediente _exp;
+  Expediente _aux;
+#nullable enable
+  string _mensajeError = "";
+  void CerrarError() => _mensajeError = "";
+  void Modificar()
+  {
+    try
+    {
+      casoDeUsoExpedienteModificar.Ejecutar(Id, _exp);
+      Navigation.NavigateTo($"/{Id}");
+    }
+    catch (Exception e)
+    {
+      _mensajeError = e.Message;
+    }
+  }
+  protected override void OnParametersSet()
+  {
+    _exp = casoDeUsoExpedienteConsultaPorId.Ejecutar(IdExp);
+    _aux = new() { Caratula = _exp.Caratula };
+
+  }
+  bool PoseePermiso()
+  {
+    try
+    {
+      if (!ServicioAutorizacion.PoseeElPermiso(Id, Permiso.ExpedienteModificacion))
+      {
+        _mensajeError = "No tiene los permisos necesarios para realizar esta operación";
+        return false;
+      }
+      return true;
+    }
+    catch
+    {
+      _mensajeError = "Ocurrió un error validando su usuario";
+      return false;
+    }
+
+  }
+
+}
+<style>
+  .margin {
+    margin-bottom: 10px;
+    margin-top: 30px;
+
+  }
+</style>

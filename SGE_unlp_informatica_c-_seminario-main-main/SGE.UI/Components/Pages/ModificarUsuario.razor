@@ -1,0 +1,155 @@
+@page "/usuarios/modificar/{IdSesion:int}/{IdUsuario:int}"
+@inject NavigationManager Navigation
+@using SGE.Aplicacion
+@inject CasoDeUsoUsuarioModificar casoDeUsoUsuarioModificar
+@inject CasoDeUsoUsuarioObtenerPorId casoDeUsoUsuarioObtenerPorId
+@rendermode InteractiveServer
+<PageTitle>Modificar usuario</PageTitle>
+
+@if (IdSesion == 1 || IdSesion == IdUsuario)
+{
+    <div class="container mt-5">
+        <h2> Modificando usuario con id: @IdUsuario</h2>
+        <div class="form-group">
+            <label>Nombre:</label>
+            <input type="text" class="form-control" placeholder="@_aux.Nombre" @bind="_user.Nombre" />
+        </div>
+        <div class="form-group">
+            <label>Apellido:</label>
+            <input type="text" class="form-control" placeholder="@_aux.Apellido" @bind="_user.Apellido" />
+        </div>
+        <div class="form-group">
+            <label>Correo electrónico:</label>
+            <input type="email" class="form-control" placeholder="@_aux.CorreoElectronico"
+                @bind="_user.CorreoElectronico" />
+        </div>
+        <p class="verticalmargin"> Por favor, reescriba la contraseña </p>
+        <div class="form-group">
+            <label>contraseña:</label>
+            <input type="password" class="form-control" @bind="@_contraseña" />
+        </div>
+
+        @if (IdSesion == 1)
+        {
+            @if (IdUsuario != 1)
+            {
+                <h4 class="margin"> Permisos </h4>
+                <div class="form-group">
+                    <label> @_per[0].ToString() </label>
+                    <input type="checkbox" @bind="_user.Permisos[0]" />
+                </div>
+                <div class="form-group">
+                    <label> @_per[1].ToString() </label>
+                    <input type="checkbox" @bind="_user.Permisos[1]" />
+                </div>
+                <div class="form-group">
+                    <label> @_per[2].ToString() </label>
+                    <input type="checkbox" @bind="_user.Permisos[2]" />
+                </div>
+                <div class="form-group">
+                    <label> @_per[3].ToString() </label>
+                    <input type="checkbox" @bind="_user.Permisos[3]" />
+                </div>
+                <div class="form-group">
+                    <label> @_per[4].ToString() </label>
+                    <input type="checkbox" @bind="_user.Permisos[4]" />
+                </div>
+                <div class="form-group">
+                    <label> @_per[5].ToString() </label>
+                    <input type="checkbox" @bind="_user.Permisos[5]" />
+                </div>
+            }
+            else
+            {
+                <p>Usted tiene todos los permisos.</p>
+            }
+        }
+
+        <button type="submit" @onclick="Modificar" class="btn btn-primary mt-3">Modificar</button>
+
+        <p class="verticalmargin"> Si no quiere modificar la contraseña dejela vacía</p>
+    </div>
+}
+
+@if (_mensajeError != "")
+{
+    <div class="alert alert-danger alinear margin" role="alert">
+        <strong>Error!</strong> @_mensajeError
+        <button type="button" class="close" @onclick="CerrarError">x</button>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int IdSesion { get; set; }
+    [Parameter]
+    public int IdUsuario { get; set; }
+    Permiso[] _per = Enum.GetValues(typeof(Permiso)).Cast<Permiso>().ToArray();
+#nullable disable
+    Usuario _aux;
+    Usuario _user;
+#nullable enable
+    string _contraseña = "";
+    string _mensajeError = "";
+    void CerrarError() => _mensajeError = "";
+    void Modificar()
+    {
+        try
+        {
+            if (_contraseña != "")
+            {
+                _user.Contraseña = _contraseña;
+            }
+            casoDeUsoUsuarioModificar.Ejecutar(_user, _aux.Contraseña);
+            if (IdSesion == 1)
+            {
+                Navigation.NavigateTo($"/usuarios/{IdSesion}");
+            }
+            else
+            {
+                Navigation.NavigateTo($"/{IdSesion}");
+            }
+        }
+        catch (Exception e)
+        {
+            _mensajeError = e.Message;
+        }
+    }
+    protected override void OnParametersSet()
+    {
+        try
+        {
+            _user = casoDeUsoUsuarioObtenerPorId.Ejecutar(IdUsuario);
+            _aux = new()
+                {
+                    Nombre = _user.Nombre,
+                    Apellido = _user.Apellido,
+                    CorreoElectronico = _user.CorreoElectronico,
+                    Contraseña = _user.Contraseña,
+                    Permisos = _user.Permisos
+                };
+        }
+        catch
+        {
+            _mensajeError = "No se pudo obtener el usuario";
+        }
+    }
+}
+
+<style>
+    .mt-5 {
+        margin-top: 10px;
+    }
+
+    .mt-3 {
+        margin-top: 10px;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+</style>

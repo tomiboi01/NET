@@ -1,0 +1,90 @@
+@page "/tramite/agregar/{Id:int}/{IdExp:int}"
+
+
+@inject CasoDeUsoTramiteAlta casoDeUsoTramiteAlta
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+@inject IServicioAutorizacion ServicioAutorizacion
+<PageTitle>Agregando trámite</PageTitle>
+@if (PoseePermiso())
+{
+    <h3>Agregar trámite</h3>
+
+
+    <div class="form-group margin">
+        <label> Contenido </label>
+        <input @bind=@_tramite.Contenido>
+        <label> Etiqueta </label>
+        <select @bind="@_tramite.Etiqueta">
+            <option value="@EtiquetaTramite.EscritoPresentado">Escrito presentado</option>
+            <option value="@EtiquetaTramite.PaseAEstudio">Pase a estudio</option>
+            <option value="@EtiquetaTramite.Despacho"> Despachado</option>
+            <option value="@EtiquetaTramite.Resolucion">Resolucion</option>
+            <option value="@EtiquetaTramite.Notificacion">Notificación</option>
+            <option value="@EtiquetaTramite.PaseAlArchivo">Pase al archivo</option>
+        </select>
+    </div>
+    <button class="btn btn-primary" @onclick="Agregar">Agregar</button>
+
+    @if (mensajeError != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            <strong>Error!</strong> @mensajeError.
+            <button type="button" class="close" @onclick="cerrarError">x</button>
+        </div>
+    }
+
+}
+else
+{
+    <div class="alert alert-danger " role="alert">
+        <strong class>No tiene los pérmisos necesarios para realizar esta operación</strong>
+        <button type="button" class="close" href="/">x</button>
+    </div>
+}
+
+@code
+{
+    Tramite _tramite = new();
+    [Parameter]
+    public int Id { get; set; }
+    [Parameter]
+    public int IdExp { get; set; }
+
+    string mensajeError = "";
+
+    void cerrarError() => mensajeError = "";
+    void Agregar()
+    {
+        try
+        {
+            _tramite.ExpedienteId = IdExp;
+            casoDeUsoTramiteAlta.Ejecutar(Id, _tramite);
+            Navigation.NavigateTo($"/{Id}");
+
+        }
+        catch (Exception e)
+        {
+            mensajeError = e.Message;
+        }
+    }
+    bool PoseePermiso()
+    {
+        try
+        {
+            if (!ServicioAutorizacion.PoseeElPermiso(Id, Permiso.TramiteAlta))
+            {
+                mensajeError = "No tiene los permisos necesarios para realizar esta operación";
+                return false;
+            }
+            return true;
+        }
+        catch
+        {
+            mensajeError = "Ocurrió un error validando su usuario";
+            return false;
+        }
+
+    }
+
+}

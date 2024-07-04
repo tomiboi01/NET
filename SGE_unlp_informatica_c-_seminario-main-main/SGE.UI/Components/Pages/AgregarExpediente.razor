@@ -1,0 +1,76 @@
+@page "/expediente/agregar/{Id:int}"
+@rendermode InteractiveServer
+@inject IServicioAutorizacion ServicioAutorizacion
+@inject CasoDeUsoExpedienteAlta CasoDeUsoExpedienteAlta
+@inject NavigationManager Navigation
+<PageTitle>Agregar expediente</PageTitle>
+@if (PoseePermiso())
+{
+    <div class="form-group margin">
+        <label>Carátula</label>
+        <input type="text" @bind="_expediente.Caratula" />
+        <button class="btn btn-primary" @onclick="Guardar">Guardar</button>
+    </div>
+    @if (mensajeError != "")
+    {
+        <div class="alert alert-danger margin alinear" role="alert">
+            <strong>Error!</strong> @mensajeError
+            <button type="button" class="close" @onclick="Cerrar">x</button>
+        </div>
+    }
+
+
+    <p class="margin"> Todos los expedientes se inician con estado Recien Iniciado </p>
+}
+else
+{
+    <div class="alert alert-danger margin alinear" role="alert">
+        <strong>Error!</strong> @mensajeError.
+    </div>
+    <button @onclick="Volver">Volver</button>
+}
+@code {
+    Expediente _expediente = new Expediente();
+    string mensajeError = "";
+    [Parameter]
+    public int Id { get; set; }
+    void Guardar()
+    {
+        try
+        {
+            CasoDeUsoExpedienteAlta.Ejecutar(Id, _expediente);
+            Navigation.NavigateTo($"/{Id}");
+        }
+        catch (Exception ex)
+        {
+            mensajeError = ex.Message;
+        }
+    }
+    void Volver()
+    {
+        Navigation.NavigateTo($"/{Id}");
+    }
+    void Cerrar()
+    {
+        mensajeError = "";
+
+    }
+    bool PoseePermiso()
+    {
+        try
+        {
+            if (!ServicioAutorizacion.PoseeElPermiso(Id, Permiso.ExpedienteAlta))
+            {
+                mensajeError = "No tiene los permisos necesarios para realizar esta operación";
+                return false;
+            }
+            return true;
+        }
+        catch
+        {
+            mensajeError = "Ocurrió un error validando su usuario";
+            return false;
+        }
+
+    }
+}
